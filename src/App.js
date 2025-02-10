@@ -3,21 +3,27 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AppRoutes from "./Routes";
+import { getUser, setUser, clearUser } from "./utils/user";
+import { loginEmployee, logoutEmployee } from "./utils/employee";
 import "./App.css";
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUserState] = useState(getUser());
 
   const handleLogin = (username, password) => {
-    if (username === "mendi" && password === "50K") {
-      setUser({ username, role: "employee" });
+    const loggedUser = loginEmployee(username, password);
+    if (loggedUser) {
+      setUserState(loggedUser);
+      setUser(loggedUser);
     } else {
       alert("Incorrect username or password");
     }
   };
 
   const handleLogout = () => {
-    setUser(null);
+    setUserState(null);
+    clearUser();
+    logoutEmployee();
   };
 
   return (

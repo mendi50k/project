@@ -1,9 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 
 export default function Header({ user, onLogout }) {
-  const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const navigate = useNavigate();
 
   return (
     <header className="header">
@@ -15,15 +14,20 @@ export default function Header({ user, onLogout }) {
           <Link to="/contact">Contact</Link>
         </nav>
 
-        {user?.role === "employee" ? (
-          <button className="logout-button" onClick={onLogout}>Logout</button>
-        ) : (
-          isHomePage && (
+        <div className="header-buttons">
+          {user?.role === "employee" ? (
+            <button className="employee-login" onClick={() => { 
+              onLogout();
+              navigate("/"); // אחרי Logout המשתמש חוזר לדף הבית
+            }}>
+              Logout
+            </button>
+          ) : (
             <Link to="/login">
               <button className="employee-login">Employee Login</button>
             </Link>
-          )
-        )}
+          )}
+        </div>
       </div>
     </header>
   );
